@@ -3,6 +3,7 @@ package com.radek.customerservice.controllers;
 import com.radek.customerservice.entity.Customer;
 import com.radek.customerservice.services.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +40,13 @@ public class CustomerController {
     }
 
     @DeleteMapping("/customers/{id}")
-    public String deleteCustomer(@PathVariable Long id){
-        return customerService
-                .removeCustomer(id);
+    public ResponseEntity<String> deleteCustomer(@PathVariable Long id){
+        return ResponseEntity.ok(customerService.removeCustomer(id));
     }
 
     @PutMapping("/customers/{id}")
-    public String updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
-        customerService.updateCustomer(id,customer);
-        return String.format("Updated %s.",customer);
+    public ResponseEntity<String> updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
+        return ResponseEntity.accepted()
+                .body(customerService.updateCustomer(id,customer));
     }
 }

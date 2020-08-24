@@ -19,40 +19,48 @@ public class CustomerService {
     @Qualifier("customer")
     private final CustomerRepository customerRepository;
 
-    public String addCustomer(Customer customer){
-        if (customerRepository.existsByNameAndLastName(customer.getName(),customer.getLastName())){
+    public String addCustomer(Customer customer) {
+        if (customerRepository.existsByNameAndLastName(customer.getName(), customer.getLastName())) {
             return String.format("%s is already saved.", customer);
         }
         customerRepository.save(customer);
-        return String.format("Saved %s.",customer);
+        return String.format("Saved %s.", customer);
 
     }
 
-    public List<Customer> getCustomers(){
+    public List<Customer> getCustomers() {
         List<Customer> customers = new ArrayList<>();
         customerRepository.findAll()
                 .forEach(customers::add);
         return customers.isEmpty() ? Collections.emptyList() : customers;
     }
 
-    public String removeCustomer(Long id){
-        if(customerRepository.existsById(id)) {
+    public String removeCustomer(Long id) {
+        if (customerRepository.existsById(id)) {
+            Customer c = customerRepository.findById(id).get();
             customerRepository.deleteById(id);
 
-            return String.format("Removed %s ", customerRepository.findById(id));
+            return String.format("Removed %s ", c);
         }
         return String.format("Customer %d not found.", id);
     }
 
-    public Optional<Customer> getCustomerById(Long id){
+    public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);
     }
 
-    public void updateCustomer(Long id, Customer oldCustomer){
-        Customer newCustomer = customerRepository.findById(id).get();
-        newCustomer.setName(oldCustomer.getName());
-        newCustomer.setLastName(oldCustomer.getLastName());
-        newCustomer.setEmail(oldCustomer.getEmail());
-        customerRepository.save(newCustomer);
+    public String updateCustomer(Long id, Customer oldCustomer) {
+        if (customerRepository.findById(id).isPresent()) {
+            Customer newCustomer = customerRepository.findById(id).get();
+            newCustomer.setName(oldCustomer.getName());
+            newCustomer.setLastName(oldCustomer.getLastName());
+            newCustomer.setEmail(oldCustomer.getEmail());
+            newCustomer.setCity(oldCustomer.getCity());
+            newCustomer.setAddress(oldCustomer.getAddress());
+            customerRepository.save(newCustomer);
+
+            return String.format("Updated %s",newCustomer);
+        }
+        return String.format("No %s found in database to update." ,oldCustomer);
     }
 }
