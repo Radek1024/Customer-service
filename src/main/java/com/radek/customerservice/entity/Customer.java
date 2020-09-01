@@ -18,7 +18,7 @@ public class Customer {
     private Long id;
     @NotNull
     @JsonProperty("name")
-    private String name;425
+    private String name;
     @NotNull
     @JsonProperty("last name")
     private String lastName;

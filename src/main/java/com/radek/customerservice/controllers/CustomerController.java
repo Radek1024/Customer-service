@@ -33,6 +33,11 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getCustomers());
     }
 
+    @GetMapping("/customers/{id}")
+    public Optional<Customer> getCustomerById(@PathVariable Long id){
+      return  customerService.getCustomerById(id);
+    }
+
     @PostMapping("/customers")
     public ResponseEntity<String> addCustomer(@RequestBody Customer customer){
         return ResponseEntity.accepted()
