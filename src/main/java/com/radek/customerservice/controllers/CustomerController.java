@@ -1,6 +1,7 @@
 package com.radek.customerservice.controllers;
 
 import com.radek.customerservice.entity.Customer;
+import com.radek.customerservice.entity.CustomerList;
 import com.radek.customerservice.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class CustomerController {
     }   
 
     @GetMapping("/customers")
-    public ResponseEntity<List<Customer>> getCustomers(){
-        if (customerService.getCustomers().isEmpty()){
+    public ResponseEntity<CustomerList> getCustomers(){
+        if (customerService.getCustomers().getCustomers().isEmpty()){
             return ResponseEntity.notFound()
                     .build();
         }

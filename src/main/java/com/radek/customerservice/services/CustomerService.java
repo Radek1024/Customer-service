@@ -1,6 +1,7 @@
 package com.radek.customerservice.services;
 
 import com.radek.customerservice.entity.Customer;
+import com.radek.customerservice.entity.CustomerList;
 import com.radek.customerservice.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,13 @@ public class CustomerService {
 
     }
 
-    public List<Customer> getCustomers() {
+    public CustomerList getCustomers() {
         List<Customer> customers = new ArrayList<>();
+        CustomerList customerList = new CustomerList();
         customerRepository.findAll()
                 .forEach(customers::add);
-        return customers.isEmpty() ? Collections.emptyList() : customers;
+        customerList.setCustomers(customers);
+        return customerList;
     }
 
     public String removeCustomer(Long id) {
@@ -59,8 +62,8 @@ public class CustomerService {
             newCustomer.setAddress(oldCustomer.getAddress());
             customerRepository.save(newCustomer);
 
-            return String.format("Updated %s",newCustomer);
+            return String.format("Updated %s", newCustomer);
         }
-        return String.format("No %s found in database to update." ,oldCustomer);
+        return String.format("No %s found in database to update.", oldCustomer);
     }
 }

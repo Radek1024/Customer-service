@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("customer")
 public interface CustomerRepository extends CrudRepository<Customer,Long> {
-    void deleteById(Long id);
     boolean existsByNameAndLastName(String name, String lastName);
 }
