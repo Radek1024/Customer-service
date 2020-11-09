@@ -29,13 +29,11 @@ public class CustomerService {
 
     }
 
-    public CustomerList getCustomers() {
+    public List<Customer> getCustomers() {
         List<Customer> customers = new ArrayList<>();
-        CustomerList customerList = new CustomerList();
         customerRepository.findAll()
                 .forEach(customers::add);
-        customerList.setCustomers(customers);
-        return customerList;
+        return customers;
     }
 
     public String removeCustomer(Long id) {

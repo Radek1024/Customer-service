@@ -26,8 +26,8 @@ public class CustomerController {
     }   
 
     @GetMapping("/customers")
-    public ResponseEntity<CustomerList> getCustomers(){
-        if (customerService.getCustomers().getCustomers().isEmpty()){
+    public ResponseEntity<List<Customer>> getCustomers(){
+        if (customerService.getCustomers().isEmpty()){
             return ResponseEntity.notFound()
                     .build();
         }
@@ -43,6 +43,7 @@ public class CustomerController {
     public ResponseEntity<String> addCustomer(@RequestBody Customer customer){
         return ResponseEntity.accepted()
                 .body(customerService.addCustomer(customer));
+
     }
 
     @DeleteMapping("/customers/{id}")
