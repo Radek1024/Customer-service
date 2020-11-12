@@ -1,6 +1,7 @@
 package com.radek.customerservice;
 
 import com.radek.customerservice.entity.Customer;
+import com.radek.customerservice.repositories.CustomerRepository;
 import com.radek.customerservice.services.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -99,12 +100,13 @@ class CustomerServiceApplicationTests {
         customer.setLastName("Angel");
         customer.setId(123L);
 
-        when(service.updateCustomer(123L,customer)).thenReturn("Henry");
-        String newCustomer = service.updateCustomer(123L,customer);
+        when(service.updateCustomer(customer.getId(), customer)).thenReturn("updated to Steven");
+        String newCustomer = service.updateCustomer(customer.getId(), customer);
 
         assertNotNull(newCustomer);
-        assertEquals(newCustomer,"Henry");
-        assertNotEquals(customer.getName(),newCustomer);
+        assertEquals("updated to Steven", newCustomer);
+        assertNotEquals(newCustomer, customer.getName());
+        assertEquals(6L,newCustomer.chars().count());
     }
 
 }
