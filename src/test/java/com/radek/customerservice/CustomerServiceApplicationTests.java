@@ -23,21 +23,20 @@ class CustomerServiceApplicationTests {
     }
 
     @Test
-    public void testingAddCustomers(){
+    public void addCustomersTest(){
         Customer customer = new Customer();
         customer.setName("John");
         customer.setLastName("Doe");
-        customer.setId(1L);
 
-        when(service.addCustomer(customer)).thenReturn("saved John Doe");
+        when(service.addCustomer(customer)).thenReturn("saved customer");
         String assumption = service.addCustomer(customer);
 
         assertNotNull(assumption);
-        assertEquals("saved John Doe",assumption);
+        assertEquals("saved customer",assumption);
     }
 
     @Test
-    public void testingGetCustomers(){
+    public void getCustomersTest(){
         Customer customer = new Customer();
         customer.setName("John");
         customer.setLastName("Doe");
@@ -56,21 +55,21 @@ class CustomerServiceApplicationTests {
     }
 
     @Test
-    public void testingRemoveCustomer(){
+    public void removeCustomerTest(){
         Customer customer = new Customer();
         customer.setName("John");
         customer.setLastName("Doe");
         customer.setId(1L);
 
-        when(service.removeCustomer(1L)).thenReturn("removed customer id 1");
+        when(service.removeCustomer(1L)).thenReturn("removed customer id " + customer.getId());
         String removed = service.removeCustomer(1L);
 
         assertNotNull(removed);
-        assertEquals("removed customer id 1",removed);
+        assertEquals("removed customer id " + customer.getId(),removed);
     }
 
     @Test
-    public void testingGetCustomerById(){
+    public void getCustomerByIdTest(){
         Customer customer = new Customer();
         customer.setName("George");
         customer.setLastName("Orwell");
@@ -82,19 +81,19 @@ class CustomerServiceApplicationTests {
 
         when(service.getCustomerById(11L)).thenReturn(Optional.of(customer));
         when(service.getCustomerById(75L)).thenReturn(Optional.of(customer1));
-        Optional<Customer> optionalCustomer = service.getCustomerById(11L);
-        Optional<Customer> optionalCustomer1 = service.getCustomerById(75L);
+        Customer c = service.getCustomerById(11L).get();
+        Customer c1 = service.getCustomerById(75L).get();
 
-        assertNotNull(optionalCustomer);
-        assertNotNull(optionalCustomer1);
-        assertEquals(optionalCustomer.get().getName(),customer.getName());
-        assertEquals(optionalCustomer.get().getLastName(),customer.getLastName());
-        assertEquals(optionalCustomer1.get().getName(),customer1.getName());
-        assertEquals(optionalCustomer1.get().getLastName(),customer1.getLastName());
+        assertNotNull(c);
+        assertNotNull(c1);
+        assertEquals(c.getName(),customer.getName());
+        assertEquals(c.getLastName(),customer.getLastName());
+        assertEquals(c1.getName(),customer1.getName());
+        assertEquals(c1.getLastName(),customer1.getLastName());
     }
 
     @Test
-    public void testingUpdateCustomer(){
+    public void updateCustomerTest(){
         Customer customer = new Customer();
         customer.setName("Harry");
         customer.setLastName("Angel");
