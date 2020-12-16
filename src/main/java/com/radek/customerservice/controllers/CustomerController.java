@@ -43,7 +43,6 @@ public class CustomerController {
     public ResponseEntity<String> addCustomer(@RequestBody Customer customer){
         return ResponseEntity.accepted()
                 .body(customerService.addCustomer(customer));
-
     }
 
     @DeleteMapping("/customers/{id}")

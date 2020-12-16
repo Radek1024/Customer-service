@@ -2,9 +2,13 @@ package com.radek.customerservice;
 
 import com.radek.customerservice.controllers.CustomerController;
 import com.radek.customerservice.entity.Customer;
-import org.apache.coyote.Response;
+import com.radek.customerservice.services.CustomerService;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +23,15 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class CustomerControllerApplicationsTests {
-
+    @InjectMocks
     private CustomerController controller;
+    @Mock
+    private CustomerService customerService;
 
-    @BeforeEach
+    @Before
     public void setMock(){
-        controller = mock(CustomerController.class);
+        //controller = mock(CustomerController.class);
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -33,8 +40,9 @@ public class CustomerControllerApplicationsTests {
         customer.setName("John");
         customer.setLastName("Doe");
 
-        when(controller.addCustomer(customer)).thenReturn(ResponseEntity.accepted().body(customer.getName() + " " + customer.getLastName()));
+        when(controller.addCustomer(customer)).thenReturn(ResponseEntity.accepted().body(customerService.addCustomer(customer)));
         ResponseEntity<String> response = controller.addCustomer(customer);
+        //when(controller.addCustomer(customer)).thenReturn(ResponseEntity.ok(customerService.addCustomer(customer)));
 
         assertNotNull(response);
         assertEquals(response.getBody(), "John Doe");
