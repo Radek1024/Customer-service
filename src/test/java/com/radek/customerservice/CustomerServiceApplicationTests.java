@@ -1,7 +1,6 @@
 package com.radek.customerservice;
 
 import com.radek.customerservice.entity.Customer;
-import com.radek.customerservice.repositories.CustomerRepository;
 import com.radek.customerservice.services.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ class CustomerServiceApplicationTests {
     }
 
     @Test
-    public void addCustomersTest(){
+    public void add_customers_test(){
         Customer customer = new Customer();
         customer.setName("John");
         customer.setLastName("Doe");
@@ -37,7 +36,7 @@ class CustomerServiceApplicationTests {
     }
 
     @Test
-    public void getCustomersTest(){
+    public void get_customers_test(){
         Customer customer = new Customer();
         customer.setName("John");
         customer.setLastName("Doe");
@@ -56,7 +55,7 @@ class CustomerServiceApplicationTests {
     }
 
     @Test
-    public void removeCustomerTest(){
+    public void remove_customer_test(){
         Customer customer = new Customer();
         customer.setName("John");
         customer.setLastName("Doe");
@@ -70,7 +69,7 @@ class CustomerServiceApplicationTests {
     }
 
     @Test
-    public void getCustomerByIdTest(){
+    public void get_customer_by_id_test(){
         Customer customer = new Customer();
         customer.setName("George");
         customer.setLastName("Orwell");
@@ -80,10 +79,10 @@ class CustomerServiceApplicationTests {
         customer.setLastName("Hawking");
         customer.setId(75L);
 
-        when(service.getCustomerById(11L)).thenReturn(Optional.of(customer));
-        when(service.getCustomerById(75L)).thenReturn(Optional.of(customer1));
-        Customer c = service.getCustomerById(11L).get();
-        Customer c1 = service.getCustomerById(75L).get();
+        when(service.getCustomerById(11L)).thenReturn(customer);
+        when(service.getCustomerById(75L)).thenReturn(customer1);
+        Customer c = service.getCustomerById(11L);
+        Customer c1 = service.getCustomerById(75L);
 
         assertNotNull(c);
         assertNotNull(c1);
@@ -94,19 +93,18 @@ class CustomerServiceApplicationTests {
     }
 
     @Test
-    public void updateCustomerTest(){
+    public void update_customer_test(){
         Customer customer = new Customer();
         customer.setName("Harry");
         customer.setLastName("Angel");
         customer.setId(123L);
 
-        when(service.updateCustomer(customer.getId(), customer)).thenReturn("updated to Steven");
-        String newCustomer = service.updateCustomer(customer.getId(), customer);
+        when(service.updateCustomer(123L,customer)).thenReturn("Henry");
+        String newCustomer = service.updateCustomer(123L,customer);
 
         assertNotNull(newCustomer);
-        assertEquals("updated to Steven", newCustomer);
-        assertNotEquals(newCustomer, customer.getName());
-        assertEquals(6L,newCustomer.chars().count());
+        assertEquals(newCustomer,"Henry");
+        assertNotEquals(customer.getName(),newCustomer);
     }
 
 }

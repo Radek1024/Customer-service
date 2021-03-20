@@ -1,15 +1,11 @@
 package com.radek.customerservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.NotNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@NoArgsConstructor
 @Data
 /*@Table(name = "customers")*/
 public class Customer {
@@ -17,19 +13,24 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotNull
+
+    @NotNull(message = "please fill in name")
     @JsonProperty("name")
     private String name;
-    @NotNull
+
+    @NotNull(message = "please fill in last name")
     @JsonProperty("last name")
     private String lastName;
-    @NotNull
+
+    @NotNull(message = "please fill in email address")
     @JsonProperty("email")
     private String email;
-    @NotNull
+
+    @NotNull(message = "please fill in city")
     @JsonProperty("city")
     private String city;
-    @NotNull
+
+    @NotNull(message = "please fill in address")
     @JsonProperty("address")
     private String address;
 }

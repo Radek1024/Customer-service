@@ -1,6 +1,5 @@
 package com.radek.customerservice.entity;
 
-import com.radek.customerservice.repositories.CustomerRepository;
 import com.radek.customerservice.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

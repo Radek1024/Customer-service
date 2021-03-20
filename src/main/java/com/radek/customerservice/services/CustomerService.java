@@ -1,10 +1,10 @@
 package com.radek.customerservice.services;
 
 import com.radek.customerservice.entity.Customer;
-import com.radek.customerservice.entity.CustomerList;
+import com.radek.customerservice.exceptions.ResourceAlreadyExists;
+import com.radek.customerservice.exceptions.ResourceNotFoundException;
 import com.radek.customerservice.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -16,43 +16,40 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
-
     @Qualifier("customer")
     private final CustomerRepository customerRepository;
 
     public String addCustomer(Customer customer) {
         if (customerRepository.existsByNameAndLastName(customer.getName(), customer.getLastName())) {
-            return String.format("%s is already saved.", customer);
+            throw new ResourceAlreadyExists(customer.getLastName());
         }
         customerRepository.save(customer);
         return String.format("Saved %s.", customer);
-
     }
 
     public List<Customer> getCustomers() {
         List<Customer> customers = new ArrayList<>();
         customerRepository.findAll()
                 .forEach(customers::add);
-        return customers;
+        return customers.isEmpty() ? Collections.emptyList() : customers;
     }
 
     public String removeCustomer(Long id) {
-        if (customerRepository.existsById(id)) {
-            Customer c = customerRepository.findById(id).get();
-            customerRepository.deleteById(id);
+        Customer c = customerRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException(id));
+        customerRepository.deleteById(id);
 
-            return String.format("Removed %s ", c);
-        }
-        return String.format("Customer %d not found.", id);
+        return String.format("Removed %s ", c);
     }
 
-    public Optional<Customer> getCustomerById(Long id) {
-        return customerRepository.findById(id);
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(id));
     }
 
     public String updateCustomer(Long id, Customer oldCustomer) {
-        if (customerRepository.findById(id).isPresent()) {
-            Customer newCustomer = customerRepository.findById(id).get();
+            Customer newCustomer = customerRepository.findById(id)
+                    .orElseThrow(()->new ResourceNotFoundException(id));
             newCustomer.setName(oldCustomer.getName());
             newCustomer.setLastName(oldCustomer.getLastName());
             newCustomer.setEmail(oldCustomer.getEmail());
@@ -61,7 +58,5 @@ public class CustomerService {
             customerRepository.save(newCustomer);
 
             return String.format("Updated %s", newCustomer);
-        }
-        return String.format("No %s found in database to update.", oldCustomer);
     }
 }

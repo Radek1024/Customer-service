@@ -15,23 +15,19 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class CustomerControllerApplicationsTests {
-    @InjectMocks
     private CustomerController controller;
-    @Mock
-    private CustomerService customerService;
 
-    @Before
+    @BeforeEach
     public void setMock(){
-        //controller = mock(CustomerController.class);
-        MockitoAnnotations.initMocks(this);
+        controller = mock(CustomerController.class);
     }
 
     @Test
@@ -40,12 +36,11 @@ public class CustomerControllerApplicationsTests {
         customer.setName("John");
         customer.setLastName("Doe");
 
-        when(controller.addCustomer(customer)).thenReturn(ResponseEntity.accepted().body(customerService.addCustomer(customer)));
+        when(controller.addCustomer(customer)).thenReturn(ResponseEntity.accepted().body(customer.toString()));
         ResponseEntity<String> response = controller.addCustomer(customer);
-        //when(controller.addCustomer(customer)).thenReturn(ResponseEntity.ok(customerService.addCustomer(customer)));
 
         assertNotNull(response);
-        assertEquals(response.getBody(), "John Doe");
+        assertEquals(response.getBody(), customer.toString());
         assertEquals(response.getStatusCode(), HttpStatus.ACCEPTED);
     }
 
@@ -63,55 +58,9 @@ public class CustomerControllerApplicationsTests {
 
         assertNotNull(customerList);
         assertEquals(customerList.size(),2);
-        assertEquals("John",customerList.get(0).getName());
-        assertEquals("Doe", customerList.get(0).getLastName());
-        assertEquals("Robert", customerList.get(1).getName());
-        assertEquals("Miles", customerList.get(1).getLastName());
-    }
-
-    @Test
-    public void getCustomerById(){
-        Customer c = new Customer();
-        c.setName("John");
-        c.setLastName("Doe");
-        c.setId(123L);
-
-        when(controller.getCustomerById(123L)).thenReturn(Optional.of(c));
-        Customer customer = controller.getCustomerById(123L).get();
-
-        assertNotNull(customer);
-        assertEquals("John",customer.getName());
-        assertEquals("Doe",customer.getLastName());
-        assertEquals(123L,customer.getId());
-    }
-
-    @Test
-    public void deleteCustomerTest(){
-        Customer c = new Customer();
-        c.setName("John");
-        c.setLastName("Doe");
-        c.setId(123L);
-
-        when(controller.deleteCustomer(c.getId())).thenReturn(ResponseEntity.ok().body(c.getId().toString()));
-        ResponseEntity<String> response = controller.deleteCustomer(c.getId());
-
-        assertNotNull(response.getBody());
-        assertEquals(HttpStatus.OK,response.getStatusCode());
-        assertEquals("123",response.getBody());
-    }
-
-    @Test
-    public void updateCustomerTest(){
-        Customer c = new Customer();
-        c.setName("John");
-        c.setLastName("Doe");
-        c.setId(123L);
-
-        when(controller.updateCustomer(c.getId(), c)).thenReturn(ResponseEntity.ok().body("updated " + c));
-        ResponseEntity<String> response = controller.updateCustomer(c.getId(), c);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK,response.getStatusCode());
-        assertNotEquals(response.getBody(), c.toString());
+        assertEquals(customerList.get(0).getName(),"John");
+        assertEquals(customerList.get(0).getLastName(),"Doe");
+        assertEquals(customerList.get(1).getName(),"Robert");
+        assertEquals(customerList.get(1).getLastName(),"Miles");
     }
 }
