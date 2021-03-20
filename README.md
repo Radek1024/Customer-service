@@ -1,8 +1,9 @@
 # Customer-service
 
-RESTful customer service where one can do CRUD operations on addded customer object.
+simple RESTful customer service where one can do CRUD operations on customer object.
 
-# WHAT I LEARNED
+## WHAT I LEARNED
 
-* using HttpResponseEntity
-* using jackson annnotations
+* HttpResponseEntity
+* jackson annotations
+* custom exceptions
